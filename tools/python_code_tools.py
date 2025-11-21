@@ -83,7 +83,8 @@ def register_python_code_tools(mcp: FastMCP, config: dict = None, token_provider
             # If validation passes, execute the code
             result = execute_python_code(
                 code=code,
-                config=config
+                config=config,
+                token=auth_token  # Pass token for workspace uploads
             )
             return json.dumps(result, indent=2)
         except Exception as e:

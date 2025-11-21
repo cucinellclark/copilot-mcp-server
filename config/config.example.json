@@ -18,7 +18,9 @@
             "sys"
         ],
         "temp_directory": "/tmp/copilot_python",
-        "singularity_container": "/path/to/python.sif"
+        "singularity_container": "/path/to/python.sif",
+        "workspace_output": "CopilotCodeDev",
+        "workspace_url": "https://p3.theseed.org/services/Workspace"
     },
     
     "rag_database": {

@@ -14,6 +14,11 @@ import os
 import uuid
 import base64
 import mimetypes
+from datetime import datetime
+from .workspace_functions import (
+    get_user_id_from_token,
+    upload_files_to_workspace
+)
 
 
 def _get_files_in_directory(directory: str) -> Set[str]:
@@ -106,20 +111,23 @@ def execute_python_code(
     code: str,
     timeout: Optional[int] = 30,
     capture_output: bool = True,
-    config: Optional[dict] = None
+    config: Optional[dict] = None,
+    token: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Execute Python code by writing it to a temporary script and running it
-    through a Singularity container.
+    through a Singularity container. Generated files and the script are uploaded
+    to the user's workspace.
     
     Args:
         code: The Python code to execute
         timeout: Maximum execution time in seconds
         capture_output: Whether to capture stdout/stderr
         config: Configuration dictionary with settings
+        token: Authentication token for workspace uploads
     
     Returns:
-        Dictionary with execution results including output_files
+        Dictionary with execution results including output_files and workspace_upload_results
     """
     if config is None:
         config = {}
@@ -130,7 +138,8 @@ def execute_python_code(
         "error": "",
         "result": None,
         "execution_time": 0.0,
-        "output_files": []  # New field for output files
+        "output_files": [],  # Files created by the script
+        "workspace_upload": None  # Workspace upload results
     }
     
     # Get configuration values
@@ -138,6 +147,8 @@ def execute_python_code(
     singularity_container = config.get("singularity_container")
     effective_timeout = timeout or config.get("default_timeout", 30)
     include_file_contents = config.get("include_file_contents", True)  # Config option
+    workspace_output = config.get("workspace_output", "CopilotCodeDev")
+    workspace_url = config.get("workspace_url", "https://p3.theseed.org/services/Workspace")
     
     # Validate required configuration
     if not singularity_container:
@@ -166,20 +177,35 @@ def execute_python_code(
         result["execution_time"] = time.time() - start_time
         return result
     
-    # Create temporary script file
-    script_filename = f"python_script_{uuid.uuid4().hex[:8]}.py"
-    script_path = os.path.join(temp_directory, script_filename)
+    # Create unique folder for this code execution
+    # Format: python_run_YYYYMMDD_HHMMSS_UUID
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_id = uuid.uuid4().hex[:8]
+    run_folder_name = f"python_run_{timestamp}_{run_id}"
+    run_folder_path = os.path.join(temp_directory, run_folder_name)
+    
+    # Create the run folder
+    try:
+        os.makedirs(run_folder_path, exist_ok=True)
+    except Exception as e:
+        result["error"] = f"Failed to create run folder: {str(e)}"
+        result["execution_time"] = time.time() - start_time
+        return result
+    
+    # Create script file in the run folder
+    script_filename = "script.py"
+    script_path = os.path.join(run_folder_path, script_filename)
     
     try:
         # Record files before execution to detect new output files
-        files_before = _get_files_in_directory(temp_directory)
+        files_before = _get_files_in_directory(run_folder_path)
         
-        # Write code to temporary script
+        # Write code to script file
         with open(script_path, 'w') as f:
             f.write(code)
         
         # Prepare Singularity command
-        # Mount the temp directory so the container can access the script
+        # Mount both temp_directory (parent) and run_folder so the container can access everything
         singularity_cmd = [
             "singularity",
             "exec",
@@ -196,7 +222,7 @@ def execute_python_code(
                 capture_output=capture_output,
                 text=True,
                 timeout=effective_timeout,
-                cwd=temp_directory
+                cwd=run_folder_path  # Set working directory to run folder
             )
             
             result["success"] = (process.returncode == 0)
@@ -223,10 +249,10 @@ def execute_python_code(
             # Always try to detect output files, even if execution failed
             # (files might have been created before the error/timeout)
             try:
-                files_after = _get_files_in_directory(temp_directory)
+                files_after = _get_files_in_directory(run_folder_path)
                 new_files = files_after - files_before
                 
-                # Filter out the script file itself
+                # Filter out the script file itself (it was created before execution)
                 script_path_normalized = os.path.normpath(script_path)
                 output_files = [f for f in new_files if os.path.normpath(f) != script_path_normalized]
                 
@@ -240,6 +266,58 @@ def execute_python_code(
                 result["output_files"] = []
                 if not result.get("error"):
                     result["error"] = f"Error detecting output files: {str(e)}"
+            
+            # Upload files to workspace if token is provided
+            if token:
+                try:
+                    # Extract user ID from token
+                    user_id = get_user_id_from_token(token)
+                    if not user_id:
+                        result["workspace_upload"] = {
+                            "success": False,
+                            "error": "Could not extract user ID from token"
+                        }
+                    else:
+                        # Build workspace path: /<user_id>/home/<workspace_output>/<run_folder_name>
+                        workspace_dir = f"/{user_id}/home/{workspace_output}/{run_folder_name}"
+                        
+                        # Collect all files to upload (script + output files)
+                        files_to_upload = [script_path]
+                        for file_info in result["output_files"]:
+                            if "path" in file_info:
+                                files_to_upload.append(file_info["path"])
+                        
+                        # Upload files to workspace
+                        print(f"Uploading {len(files_to_upload)} files to workspace: {workspace_dir}", file=sys.stderr)
+                        upload_result = upload_files_to_workspace(
+                            files_to_upload,
+                            workspace_dir,
+                            token,
+                            workspace_url
+                        )
+                        
+                        result["workspace_upload"] = {
+                            "success": upload_result.get("success", False),
+                            "workspace_path": workspace_dir,
+                            "total_files": upload_result.get("total_files", 0),
+                            "successful": upload_result.get("successful", 0),
+                            "failed": upload_result.get("failed", 0),
+                            "files": upload_result.get("files", [])
+                        }
+                        
+                        print(f"Workspace upload complete: {upload_result.get('successful', 0)}/{upload_result.get('total_files', 0)} files uploaded", file=sys.stderr)
+                        
+                except Exception as e:
+                    result["workspace_upload"] = {
+                        "success": False,
+                        "error": f"Error uploading to workspace: {str(e)}"
+                    }
+                    print(f"Error uploading to workspace: {str(e)}", file=sys.stderr)
+            else:
+                result["workspace_upload"] = {
+                    "success": False,
+                    "message": "No token provided, skipping workspace upload"
+                }
         
     except IOError as e:
         result["error"] = f"Failed to write script file: {str(e)}"
