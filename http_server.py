@@ -9,33 +9,25 @@ from fastmcp import FastMCP
 from tools.python_code_tools import register_python_code_tools
 from common.token_provider import TokenProvider
 from common.auth import BvbrcOAuthProvider
+from common.config import get_config
 from starlette.responses import JSONResponse
-import json
 import sys
-import os
 
-# Load configuration (optional - adjust path as needed)
-config_path = os.path.join(os.path.dirname(__file__), "config", "config.json")
-try:
-    with open(config_path, "r") as f:
-        config = json.load(f)
-except FileNotFoundError:
-    print("Warning: config/config.json not found, using defaults", file=sys.stderr)
-    config = {}
+# Load configuration
+config = get_config()
 
 # Get configuration values
-port = int(os.environ.get("PORT", config.get("port", 12011)))
-mcp_url = config.get("mcp_url", "127.0.0.1")
-python_code_config = config.get("python_code", {})
-rag_database_config = config.get("rag_database", {})
+port = config.port
+mcp_url = config.mcp_url
+python_code_config = config.python_code
+rag_database_config = config.rag_database
 
 # OAuth configuration
-authentication_url = config.get("authentication_url", "https://user.patricbrc.org/authenticate")
-openid_config_url = config.get("openid_config_url", "https://dev-7.bv-brc.org")
+authentication_url = config.authentication_url
+openid_config_url = config.openid_config_url
 
 # Publicly reachable server URL for discovery and metadata
-# Use PUBLIC_BASE_URL env var if set, otherwise construct from openid_config_url
-server_url = os.environ.get("PUBLIC_BASE_URL") or openid_config_url
+server_url = config.server_url
 
 # Initialize token provider for HTTP mode
 token_provider = TokenProvider(mode="http")
