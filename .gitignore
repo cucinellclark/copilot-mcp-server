@@ -1,0 +1,30 @@
+# Configuration files (keep example, ignore actual config)
+config/config.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# RAG Database data
+rag_data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+test_code/
+copilot_mcp_env/

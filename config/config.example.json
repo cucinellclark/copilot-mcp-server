@@ -1,0 +1,34 @@
+{
+    "_comment": "Example configuration file for Copilot MCP Server",
+    "_instructions": "Copy this file to config.json and modify as needed",
+    
+    "port": 12011,
+    "mcp_url": "127.0.0.1",
+    
+    "python_code": {
+        "default_timeout": 30,
+        "max_timeout": 300,
+        "capture_output": true,
+        "sandbox_enabled": false,
+        "allowed_modules": [
+            "math",
+            "json",
+            "datetime",
+            "os",
+            "sys"
+        ],
+        "temp_directory": "/tmp/copilot_python",
+        "singularity_container": "/path/to/python.sif"
+    },
+    
+    "rag_database": {
+        "database_type": "chromadb",
+        "database_path": "./rag_data",
+        "collection_name": "default",
+        "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+        "top_k_default": 5,
+        "chunk_size": 1000,
+        "chunk_overlap": 200
+    }
+}
+
