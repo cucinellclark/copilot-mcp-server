@@ -17,13 +17,14 @@ from functions.python_code_functions import (
 )
 
 
-def register_python_code_tools(mcp: FastMCP, config: dict = None):
+def register_python_code_tools(mcp: FastMCP, config: dict = None, token_provider=None):
     """
     Register all Python code-related MCP tools with the FastMCP server.
     
     Args:
         mcp: FastMCP server instance
         config: Configuration dictionary for Python code settings
+        token_provider: TokenProvider instance for handling authentication tokens
     """
     if config is None:
         config = {}
@@ -53,6 +54,14 @@ def register_python_code_tools(mcp: FastMCP, config: dict = None):
             - execution_time: time taken in seconds
         """
         try:
+            # Extract token using TokenProvider (if available)
+            # Token is extracted from Authorization header, not passed as parameter
+            auth_token = None
+            if token_provider:
+                auth_token = token_provider.get_token()
+                # Token is available but not required for Python code execution
+                # It can be used by the code if needed (e.g., for API calls)
+            
             # Validate syntax first
             validation_result = validate_python_code(code)
             if not validation_result["valid"]:
