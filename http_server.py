@@ -6,12 +6,17 @@ This server provides MCP tools for python_code and rag_database functionality.
 """
 
 from fastmcp import FastMCP
+from fastmcp.utilities.logging import get_logger, configure_logging
 from tools.python_code_tools import register_python_code_tools
 from common.token_provider import TokenProvider
 from common.auth import BvbrcOAuthProvider
 from common.config import get_config
 from starlette.responses import JSONResponse
 import sys
+
+# Configure logging
+configure_logging(level='INFO')
+logger = get_logger(__name__)
 
 # Load configuration
 config = get_config()
@@ -43,7 +48,7 @@ oauth = BvbrcOAuthProvider(
 mcp = FastMCP("Copilot MCP Server", auth=oauth)
 
 # Register all tools with configuration and token provider
-print("Registering python_code tools...", file=sys.stderr)
+logger.info("Registering python_code tools...")
 register_python_code_tools(mcp, python_code_config, token_provider)
 
 # Add health check tool
@@ -115,18 +120,16 @@ async def oauth2_token_route(request):
 
 def main() -> int:
     """Main entry point for the Copilot MCP Server in HTTP mode."""
-    print(f"Starting Copilot MCP Server on port {port}...", file=sys.stderr)
-    print(f"  - Server URL: http://{mcp_url}:{port}", file=sys.stderr)
+    logger.info(f"Starting Copilot MCP Server on port {port}...")
+    logger.info(f"  - Server URL: http://{mcp_url}:{port}")
     
     try:
         # Run in HTTP mode
         mcp.run(transport="http", host=mcp_url, port=port)
     except KeyboardInterrupt:
-        print("Server stopped.", file=sys.stderr)
+        logger.info("Server stopped.")
     except Exception as e:
-        print(f"Server error: {e}", file=sys.stderr)
-        import traceback
-        traceback.print_exc(file=sys.stderr)
+        logger.error(f"Server error: {e}", exc_info=True)
         return 1
     
     return 0
