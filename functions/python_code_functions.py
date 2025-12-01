@@ -12,7 +12,6 @@ from typing import Dict, Any, Optional, List, Set
 import time
 import os
 import uuid
-import base64
 import mimetypes
 from datetime import datetime
 from .workspace_functions import (
@@ -44,7 +43,7 @@ def _get_file_info(file_path: str, include_contents: bool = True) -> Dict[str, A
     
     Args:
         file_path: Path to the file
-        include_contents: Whether to include file contents (base64 for images, text for small files)
+        include_contents: Whether to include file contents (text for small files only)
     
     Returns:
         Dictionary with file metadata
@@ -91,13 +90,7 @@ def _get_file_info(file_path: str, include_contents: bool = True) -> Dict[str, A
                 # File might be binary or not readable
                 pass
         
-        # For images, optionally include base64 (if size is reasonable)
-        if file_info.get("type") == "image" and stat.st_size < 5 * 1024 * 1024:  # < 5MB
-            try:
-                with open(file_path, 'rb') as f:
-                    file_info["base64"] = base64.b64encode(f.read()).decode('utf-8')
-            except IOError:
-                pass
+        # Note: Images are not included as base64 to keep response size manageable
         
         return file_info
     except Exception as e:
@@ -206,10 +199,17 @@ def execute_python_code(
         
         # Prepare Singularity command
         # Mount both temp_directory (parent) and run_folder so the container can access everything
+        # Below commands isolate the container: no access to file systems unless bound and no network access
+        # --net --network none
+        # --containall
         singularity_cmd = [
             "singularity",
             "exec",
             "--bind", f"{temp_directory}:{temp_directory}",
+            "--net",
+            "--network",
+            "none",
+            "--containall",
             singularity_container,
             "python",
             script_path
