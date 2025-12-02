@@ -11,19 +11,15 @@ from functions.python_code_functions import (
 )
 
 from functions.rag_database_functions import (
-    query_rag_database,
-    add_to_rag_database,
-    search_rag_database,
-    get_rag_database_info
+    query_rag_helpdesk_func,
+    list_publication_datasets_func,
 )
 
 __all__ = [
     'execute_python_code',
     'validate_python_code',
     'get_python_environment_info',
-    'query_rag_database',
-    'add_to_rag_database',
-    'search_rag_database',
-    'get_rag_database_info'
+    'query_rag_helpdesk_func',
+    'list_publication_datasets_func',
 ]
 

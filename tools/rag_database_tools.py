@@ -11,10 +11,9 @@ from typing import Optional
 from fastmcp import FastMCP
 
 from functions.rag_database_functions import (
-    query_rag_helpdesk,
-    list_publication_datasets,
+    query_rag_helpdesk_func,
+    list_publication_datasets_func,
 )
-
 
 def register_rag_database_tools(mcp: FastMCP, config: dict = None):
     """
@@ -54,7 +53,7 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
             file=sys.stderr,
         )
         try:
-            result = query_rag_helpdesk(
+            result = query_rag_helpdesk_func(
                 query=query,
                 top_k=exec_top_k,
                 config=config,
@@ -95,7 +94,7 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
             file=sys.stderr,
         )
         try:
-            result = list_publication_datasets(
+            result = list_publication_datasets_func(
                 query=query,
                 top_k=exec_top_k,
                 config=config,

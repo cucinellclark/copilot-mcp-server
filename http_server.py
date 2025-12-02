@@ -8,6 +8,7 @@ This server provides MCP tools for python_code and rag_database functionality.
 from fastmcp import FastMCP
 from fastmcp.utilities.logging import get_logger, configure_logging
 from tools.python_code_tools import register_python_code_tools
+from tools.rag_database_tools import register_rag_database_tools
 from common.token_provider import TokenProvider
 from common.auth import BvbrcOAuthProvider
 from common.config import get_config
@@ -50,7 +51,7 @@ mcp = FastMCP("Copilot MCP Server", auth=oauth)
 # Register all tools with configuration and token provider
 logger.info("Registering python_code tools...")
 register_python_code_tools(mcp, python_code_config, token_provider)
-
+register_rag_database_tools(mcp, rag_database_config)
 # Add health check tool
 @mcp.tool()
 def health_check() -> str:
