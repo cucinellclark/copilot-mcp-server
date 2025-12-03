@@ -17,7 +17,7 @@ if str(_rag_api_path) not in sys.path:
 from app.services.rag_service import get_rag_service
 
 
-def query_rag_helpdesk(
+def query_rag_helpdesk_func(
     query: str,
     top_k: Optional[int] = 5,
     config: Optional[dict] = None,
@@ -89,7 +89,7 @@ def query_rag_helpdesk(
         }
 
 
-def list_publication_datasets(
+def list_publication_datasets_func(
     query: str,
     top_k: Optional[int] = 5,
     config: Optional[dict] = None,
