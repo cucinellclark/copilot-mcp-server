@@ -1,0 +1,336 @@
+<frozen importlib._bootstrap>:241: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+<frozen importlib._bootstrap>:241: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+<frozen importlib._bootstrap>:241: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
+[12/04/25 08:24:46] INFO     Registering python_code tools...  http_server.py:52
+                    INFO     Starting Copilot MCP Server on   http_server.py:124
+                             port 8052...                                       
+                    INFO       - Server URL:                  http_server.py:125
+                             http://140.221.78.67:8052                          
+
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                FastMCP 2.13.1                                │
+│                                                                              │
+│                                                                              │
+│                🖥  Server name: Copilot MCP Server                            │
+│                                                                              │
+│                📦 Transport:   HTTP                                          │
+│                🔗 Server URL:  http://140.221.78.67:8052/mcp                 │
+│                                                                              │
+│                📚 Docs:        https://gofastmcp.com                         │
+│                🚀 Hosting:     https://fastmcp.cloud                         │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+                    INFO     Starting MCP server 'Copilot MCP     server.py:2055
+                             Server' with transport 'http' on                   
+                             http://140.221.78.67:8052/mcp                      
+INFO:     Started server process [2156776]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://140.221.78.67:8052 (Press CTRL+C to quit)
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: BLAST documentation (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: BLAST documentation (top_k=10)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: BLAST documentation (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: BLAST documentation BV-BRC (top_k=1)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: BLAST documentation for blasting a private genome feature against the viral database on BV-BRC (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: BLAST service documentation BV-BRC (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: BLAST documentation for blasting a private genome feature against the viral database on BV-BRC (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: BLAST documentation for blasting a private genome feature against the viral database on BV-BRC (top_k=10)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: blast documentation bv-brc (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: blast a private genome feature against the viral database (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: blast documentation for blasting a private genome feature against the viral database (top_k=5)...
+INFO:     Shutting down
+ERROR:    Cancel 0 running task(s), timeout graceful shutdown exceeded
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2156776]
+[12/04/25 14:06:33] INFO     Server stopped.                  http_server.py:131
+<frozen importlib._bootstrap>:241: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+<frozen importlib._bootstrap>:241: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+<frozen importlib._bootstrap>:241: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
+[12/04/25 14:06:39] INFO     Registering python_code tools...  http_server.py:52
+                    INFO     Starting Copilot MCP Server on   http_server.py:124
+                             port 8052...                                       
+                    INFO       - Server URL:                  http_server.py:125
+                             http://140.221.78.67:8052                          
+
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                FastMCP 2.13.1                                │
+│                                                                              │
+│                                                                              │
+│                🖥  Server name: Copilot MCP Server                            │
+│                                                                              │
+│                📦 Transport:   HTTP                                          │
+│                🔗 Server URL:  http://140.221.78.67:8052/mcp                 │
+│                                                                              │
+│                📚 Docs:        https://gofastmcp.com                         │
+│                🚀 Hosting:     https://fastmcp.cloud                         │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+                    INFO     Starting MCP server 'Copilot MCP     server.py:2055
+                             Server' with transport 'http' on                   
+                             http://140.221.78.67:8052/mcp                      
+INFO:     Started server process [2325599]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://140.221.78.67:8052 (Press CTRL+C to quit)
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: documentation for using BLAST service page on BV-BRC (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: rnaseq service documentation (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: rnaseq service documentation (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: rnaseq service documentation (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: rnaseq service documentation (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: rnaseq service documentation (top_k=5)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1774892715
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+Querying RAG helpdesk: rnaseq service documentation (top_k=1)...
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org
+[TOKEN VERIFICATION] Verifying token
+[TOKEN VERIFICATION] Detected PATRIC token format
+[TOKEN VERIFICATION] PATRIC token parsed successfully. Username: clark.cucinell@patricbrc.org, Expiry: 1778349411
+[TOKEN VERIFICATION] Token verified successfully. Username: clark.cucinell@patricbrc.org

@@ -34,7 +34,7 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
         top_k: Optional[int] = None,
     ) -> str:
         """
-        Query the BV-BRC helpdesk rag database to retrieve relevant helpdesk documents.
+        Query the BV-BRC helpdesk RAG (Retrieval-Augmented Generation) database to retrieve relevant helpdesk documents. This tool should be used whenever information is needed about BV-BRC functionality, troubleshooting, website features, tool behavior, or documentation for BV-BRC tools and services. It is appropriate for any request involving BV-BRC systems, workflows, pages, errors, operational questions, or documentation needs that require authoritative helpdesk sources.
 
         Args:
             query: The search query string, typically a user help or troubleshooting question.
