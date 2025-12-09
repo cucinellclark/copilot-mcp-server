@@ -31,6 +31,14 @@
         "top_k_default": 5,
         "chunk_size": 1000,
         "chunk_overlap": 200
+    },
+    
+    "file_utilities": {
+        "_comment": "Configuration for file utilities tools",
+        "session_base_path": "/tmp/copilot/sessions",
+        "max_file_size_mb": 100,
+        "default_limit": 1000,
+        "max_limit": 10000
     }
 }
 

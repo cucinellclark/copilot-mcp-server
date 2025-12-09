@@ -28,13 +28,13 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
     
     top_k_default = config.get("top_k_default", 5)
 
-    @mcp.tool()
-    def query_rag_helpdesk(
+    @mcp.tool(name="helpdesk_service_usage")
+    def helpdesk_service_usage(
         query: str,
         top_k: Optional[int] = None,
     ) -> str:
         """
-        Query the BV-BRC helpdesk RAG (Retrieval-Augmented Generation) database to retrieve relevant helpdesk documents. This tool should be used whenever information is needed about BV-BRC functionality, troubleshooting, website features, tool behavior, or documentation for BV-BRC tools and services. It is appropriate for any request involving BV-BRC systems, workflows, pages, errors, operational questions, or documentation needs that require authoritative helpdesk sources.
+        Primary tool for BV-BRC usage/how-to/support questions. Use this FIRST for anything like “How do I use a service application?”, workflows, troubleshooting, parameters explained, example runs, BV-BRC pages/features, or documentation needs. Prefer this over service metadata tools; it returns authoritative helpdesk/doc content from the BV-BRC helpdesk RAG.
 
         Args:
             query: The search query string, typically a user help or troubleshooting question.
@@ -49,7 +49,7 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
         exec_top_k = top_k if top_k is not None else top_k_default
 
         print(
-            f"Querying RAG helpdesk: {query} (top_k={exec_top_k})...",
+            f"Querying BV-BRC helpdesk: {query} (top_k={exec_top_k})...",
             file=sys.stderr,
         )
         try:

@@ -80,6 +80,9 @@ class AppConfig:
         # RAG database configuration
         self.rag_database = config.get("rag_database", {})
         
+        # File utilities configuration
+        self.file_utilities = config.get("file_utilities", {})
+        
         # OAuth configuration
         self.oauth = OAuthConfig(config)
     

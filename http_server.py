@@ -9,6 +9,7 @@ from fastmcp import FastMCP
 from fastmcp.utilities.logging import get_logger, configure_logging
 from tools.python_code_tools import register_python_code_tools
 from tools.rag_database_tools import register_rag_database_tools
+from tools.file_utilities_tools import register_file_utilities_tools
 from common.token_provider import TokenProvider
 from common.auth import BvbrcOAuthProvider
 from common.config import get_config
@@ -27,6 +28,7 @@ port = config.port
 mcp_url = config.mcp_url
 python_code_config = config.python_code
 rag_database_config = config.rag_database
+file_utilities_config = config.file_utilities
 
 # OAuth configuration
 authentication_url = config.authentication_url
@@ -52,6 +54,7 @@ mcp = FastMCP("Copilot MCP Server", auth=oauth)
 logger.info("Registering python_code tools...")
 register_python_code_tools(mcp, python_code_config, token_provider)
 register_rag_database_tools(mcp, rag_database_config)
+register_file_utilities_tools(mcp, file_utilities_config)
 # Add health check tool
 @mcp.tool()
 def health_check() -> str:
