@@ -4,10 +4,12 @@ RAG Database Functions
 This module provides functions for querying and managing RAG (Retrieval-Augmented Generation) databases.
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 import sys
 import time
+import json
 from pathlib import Path
+import requests
 
 # Add rag_api to Python path to enable imports
 _rag_api_path = Path(__file__).parent.parent / "rag_api"
@@ -76,6 +78,17 @@ def query_rag_helpdesk_func(
             "index": database_name,
         }
 
+        # Summarize retrieved documents as the final step
+        documents_text = [doc.get("content", "") for doc in results if doc.get("content")]
+        summary_output = summarize_helpdesk_documents(
+            query=query,
+            documents=documents_text,
+            model_config=config.get("summarization_model", {}),
+        )
+        result["summary"] = summary_output.get("summary", "")
+        if summary_output.get("error"):
+            result["summary_error"] = summary_output["error"]
+
         return result
 
     except Exception as e:
@@ -85,7 +98,105 @@ def query_rag_helpdesk_func(
             "count": 0,
             "query": query,
             "index": database_name,
+            "summary": "",
+            "used_documents": [],
             "error": str(e),
+        }
+
+
+def summarize_helpdesk_documents(
+    query: str,
+    documents: List[str],
+    model_config: Optional[dict] = None,
+) -> Dict[str, Any]:
+    """
+    Summarize helpdesk documents to answer the query using an LLM orchestrator.
+
+    Args:
+        query: Original user query.
+        documents: List of document text snippets to summarize.
+        model_config: Configuration for the summarization model (endpoint, model, apiKey, max_tokens).
+
+    Returns:
+        Dict containing:
+        - summary: Summarized text response (empty string if unavailable)
+        - used_documents: The documents that were summarized (echo of input)
+        - error: Optional error message if summarization failed
+    """
+    if model_config is None:
+        model_config = {}
+
+    if not documents:
+        return {"summary": "", "used_documents": [], "error": None}
+
+    endpoint = model_config.get("endpoint")
+    model = model_config.get("model")
+    api_key = model_config.get("apiKey")
+    max_tokens = model_config.get("max_tokens", 2048)
+
+    if not endpoint or not model:
+        return {
+            "summary": "",
+            "used_documents": documents,
+            "error": "Summarization model configuration is missing endpoint or model",
+        }
+
+    # Prepare request payload for the orchestrator (OpenAI-compatible chat/completions)
+    prompt_documents = "\n\n".join(
+        [f"Document {idx + 1}:\n{doc}" for idx, doc in enumerate(documents)]
+    )
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are a BV-BRC helpdesk assistant. Provide a concise, actionable "
+                "answer to the user's question based only on the provided documents. "
+                "If information is insufficient, say so briefly."
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                f"User question: {query}\n\n"
+                f"Context documents:\n{prompt_documents}\n\n"
+                "Write a short summary (3-6 sentences or bullet points) that addresses "
+                "the question using only the context above."
+            ),
+        },
+    ]
+
+    headers = {"Content-Type": "application/json"}
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+
+    payload = {
+        "model": model,
+        "messages": messages,
+        "temperature": 0.7,
+        "max_tokens": max_tokens,
+    }
+
+    try:
+        response = requests.post(endpoint, json=payload, headers=headers, timeout=60)
+        response.raise_for_status()
+        data = response.json()
+        summary = (
+            data.get("choices", [{}])[0]
+            .get("message", {})
+            .get("content", "")
+            .strip()
+        )
+
+        return {
+            "summary": summary,
+            "used_documents": documents,
+            "error": None,
+        }
+    except Exception as e:
+        return {
+            "summary": "",
+            "used_documents": documents,
+            "error": f"Summarization failed: {str(e)}",
         }
 
 

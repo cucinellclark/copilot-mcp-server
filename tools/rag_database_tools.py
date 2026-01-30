@@ -43,6 +43,8 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
         Returns:
             JSON string with query results:
             - results: list of retrieved documents with scores and metadata
+            - summary: LLM-generated summary that answers the query using the retrieved documents
+            - used_documents: documents that were provided to the summarizer
             - count: number of results returned
             - query: the original query
         """
