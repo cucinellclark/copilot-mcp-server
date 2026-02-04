@@ -7,7 +7,7 @@ This module contains MCP tools for querying and managing RAG (Retrieval-Augmente
 
 import json
 import sys
-from typing import Optional
+from typing import Optional, Dict, Any
 from fastmcp import FastMCP
 
 from functions.rag_database_functions import (
@@ -32,7 +32,7 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
     def helpdesk_service_usage(
         query: str,
         top_k: Optional[int] = None,
-    ) -> str:
+    ) -> Dict[str, Any]:
         """
         Primary tool for BV-BRC usage/how-to/support questions. Use this FIRST for anything like “How do I use a service application?”, workflows, troubleshooting, parameters explained, example runs, BV-BRC pages/features, or documentation needs. Prefer this over service metadata tools; it returns authoritative helpdesk/doc content from the BV-BRC helpdesk RAG.
 
@@ -60,22 +60,21 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
                 top_k=exec_top_k,
                 config=config,
             )
-            return json.dumps(result, indent=2)
+            return result
         except Exception as e:
-            return json.dumps(
-                {
-                    "error": f"Error querying RAG helpdesk: {str(e)}",
-                    "results": [],
-                    "count": 0,
-                },
-                indent=2,
-            )
+            return {
+                "error": f"Error querying RAG helpdesk: {str(e)}",
+                "errorType": "API_ERROR",
+                "results": [],
+                "count": 0,
+                "source": "bvbrc-rag"
+            }
 
     @mcp.tool()
     def list_publication_datasets(
         query: str,
         top_k: Optional[int] = None,
-    ) -> str:
+    ) -> Dict[str, Any]:
         """
         List publication datasets relevant to a query using the RAG index.
 
@@ -101,14 +100,13 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
                 top_k=exec_top_k,
                 config=config,
             )
-            return json.dumps(result, indent=2)
+            return result
         except Exception as e:
-            return json.dumps(
-                {
-                    "error": f"Error listing publication datasets: {str(e)}",
-                    "results": [],
-                    "count": 0,
-                },
-                indent=2,
-            )
+            return {
+                "error": f"Error listing publication datasets: {str(e)}",
+                "errorType": "API_ERROR",
+                "results": [],
+                "count": 0,
+                "source": "bvbrc-rag"
+            }
 

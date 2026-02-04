@@ -132,7 +132,8 @@ def execute_python_code(
         "result": None,
         "execution_time": 0.0,
         "output_files": [],  # Files created by the script
-        "workspace_upload": None  # Workspace upload results
+        "workspace_upload": None,  # Workspace upload results
+        "source": "bvbrc-python-execution"
     }
     
     # Get configuration values
@@ -146,27 +147,32 @@ def execute_python_code(
     # Validate required configuration
     if not singularity_container:
         result["error"] = "singularity_container not specified in config"
+        result["errorType"] = "CONFIGURATION_ERROR"
         result["execution_time"] = time.time() - start_time
         return result
     
     if not os.path.exists(singularity_container):
         result["error"] = f"Singularity container not found: {singularity_container}"
+        result["errorType"] = "CONFIGURATION_ERROR"
         result["execution_time"] = time.time() - start_time
         return result
     
     # Verify temp directory exists and is accessible
     if not os.path.exists(temp_directory):
         result["error"] = f"Temp directory does not exist: {temp_directory}"
+        result["errorType"] = "CONFIGURATION_ERROR"
         result["execution_time"] = time.time() - start_time
         return result
     
     if not os.path.isdir(temp_directory):
         result["error"] = f"Temp directory path exists but is not a directory: {temp_directory}"
+        result["errorType"] = "CONFIGURATION_ERROR"
         result["execution_time"] = time.time() - start_time
         return result
     
     if not os.access(temp_directory, os.W_OK):
         result["error"] = f"Temp directory is not writable: {temp_directory}"
+        result["errorType"] = "CONFIGURATION_ERROR"
         result["execution_time"] = time.time() - start_time
         return result
     
@@ -182,6 +188,7 @@ def execute_python_code(
         os.makedirs(run_folder_path, exist_ok=True)
     except Exception as e:
         result["error"] = f"Failed to create run folder: {str(e)}"
+        result["errorType"] = "EXECUTION_ERROR"
         result["execution_time"] = time.time() - start_time
         return result
     
@@ -235,15 +242,19 @@ def execute_python_code(
             
             if process.returncode != 0:
                 result["error"] = result["error"] or f"Process exited with code {process.returncode}"
+                result["errorType"] = "EXECUTION_ERROR"
                 
         except subprocess.TimeoutExpired:
             result["error"] = f"Execution timed out after {effective_timeout} seconds"
+            result["errorType"] = "TIMEOUT_ERROR"
             result["success"] = False
         except FileNotFoundError:
             result["error"] = "Singularity command not found. Is Singularity installed?"
+            result["errorType"] = "CONFIGURATION_ERROR"
             result["success"] = False
         except Exception as e:
             result["error"] = f"Error executing Singularity command: {str(e)}"
+            result["errorType"] = "EXECUTION_ERROR"
             result["success"] = False
         finally:
             # Always try to detect output files, even if execution failed
@@ -321,9 +332,11 @@ def execute_python_code(
         
     except IOError as e:
         result["error"] = f"Failed to write script file: {str(e)}"
+        result["errorType"] = "EXECUTION_ERROR"
         result["success"] = False
     except Exception as e:
         result["error"] = f"Unexpected error: {str(e)}"
+        result["errorType"] = "EXECUTION_ERROR"
         result["success"] = False
     finally:
         result["execution_time"] = time.time() - start_time
@@ -385,7 +398,8 @@ def get_python_environment_info(config: Optional[dict] = None) -> Dict[str, Any]
         "architecture": platform.architecture(),
         "machine": platform.machine(),
         "processor": platform.processor(),
-        "python_path": sys.executable
+        "python_path": sys.executable,
+        "source": "bvbrc-python-execution"
     }
     
     # TODO: Optionally include installed packages

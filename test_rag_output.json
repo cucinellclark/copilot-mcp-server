@@ -1,0 +1,59 @@
+{
+  "results": [
+    {
+      "content": "# Metagenomic Binning Service\n\n## Overview\nThe Metagenomic Binning Service accepts either reads or contigs to group the data into genomes. It reconstructs bacterial and archaeal genomes from environmental samples [1].\n\n## See also\n* [Metagenomic Binning Service](https://bv-brc.org/app/MetagenomicBinning)\n* [Metagenomic Binning Service Tutorial](https://www.bv-brc.org/docs/tutorial/metagenomic_binning/metagenomic_binning.html)\n\n## Using the Metagenomic Binning Service\nThe **Metagenomic Binning** submenu under the **Services** main menu (Metagenomics category) opens the input form for the Metagenomic Binning Service. *Note: BV-BRC login is required.*\n\n\n\n## Options\n\n### Start With\nChoose between read files or assembled contigs to determine the input file options.\n\n### Read File Option\n \n\n### Assembled Contigs Option\n \n\n### Input File\nOptions in the Input File box depend on the selection made in the Start With box.\n\n#### Read File Option\nMultiple read types can be uploaded and submitted. ",
+      "score": 260.38397216796875,
+      "metadata": {
+        "program": "distllm",
+        "config_name": "bvbrc_helpdesk",
+        "path": "docroot/quick_references/services/metagenomic_binning_service.md",
+        "doc_id": "b36aa196-c9e7-4e77-be0b-49a92c660810"
+      }
+    },
+    {
+      "content": "This is a service for supervised extraction and annotation of high-quality, near-complete genomes from reads or metagenomically-derived contigs [1]. Reads are assembled using either MetaSPAdes [2] or MEGAHIT [3]. Each set of binned contigs represents a draft genome that will be annotated by RASTtk [4] for bacteria, or with VIGOR4 [5,6] or Mat_Peptide [7] for viruses. A structured-language binning report is provided containing quality measurements and taxonomic information about the contig bins. The BV-BRC metagenome binning service emphasizes extraction of high-quality genomes for downstream analysis using other BV-BRC tools and services.\n\n\nMetagenomic binning jobs that include assembly take, on average, take an hour to complete. However, the BV-BRC assembly service is quite popular, and there is often a long queue resulting in jobs taking 24 hours to complete. If the size of the read file is large (Gb) or the queue is long, results could take several days.\n\nThe code for the binning script is located at: [https://github.com/SEEDtk/p3_code/blob/master/scripts/p3x-process-checkv.pl](https://github.com/SEEDtk/p3_code/blob/master/scripts/p3x-process-checkv.pl)\n\nThe code for the RASTtk pipeline is located at: [https://github.com/SEEDtk/p3_code/blob/master/scripts/p3x-process-bins_generate.pl](https://github.com/SEEDtk/p3_code/blob/master/scripts/p3x-process-bins_generate.pl)\n\n## Locating the Metagenomic Binning Service App\n\n1. At the top of any BV-BRC page, clicking on the **Tools & Services** tab. Click on **Metagenomic Binning** in the drop-down box, underneath **Metagenomics**.\n\n3. This will open up the Metagenomic Binning Service landing page. ",
+      "score": 257.9878845214844,
+      "metadata": {
+        "program": "distllm",
+        "config_name": "bvbrc_helpdesk",
+        "path": "docroot/tutorial/metagenomic_binning/metagenomic_binning.md",
+        "doc_id": "1761a889-5049-475c-be50-0fb34955ef28"
+      }
+    },
+    {
+      "content": "Key outputs (auto-generated visualisations):\nKrona Plot – zoomable, multi-level pie chart of taxonomic composition.\nSankey Diagram – ribbon flow from domain → phylum → genus, highlighting read distribution.\nJob results include:\nMAG FASTA files (one per bin).\nCompleteness vs Contamination Scatter Plot – quickly spot high-quality (>90 % completeness, <5 % contamination) bins.\nResults provide:\nBAM alignment files (downloadable or viewable in the Genome Browser).\nCoverage Depth Tables – per-gene and per-genome read counts.\nCoverage Plots – visualise breadth and depth of mapping to each reference.\nUse this to track abundance of specific pathogens, AMR genes, or MAGs across samples.\n\n6 Explore & Visualise Results\nResult|Built-in Viewer|What you can do|\nKrona|Click Krona.html in job output|Zoom through taxonomic levels; export PNG/SVG.|\nSankey Diagram|sankey.html|Trace read flow across ranks; highlight unexpected taxa.|\nAbundance Bar Charts|abundance_plot.html|Compare community profiles across multiple samples.|\nMAG Quality Scatter|CheckM_plot.html|Select high-quality bins for further study.|\nCoverage Plots|coverage_plot.html (per reference)|Spot uneven coverage or low-depth regions.|\nGenome Browser|Right-click a BAM → View|Inspect read mapping on a reference genome; overlay variants.|\n\n7 Optional Down-stream Analyses\nGoal|Tool|Menu Path|\nAnnotate high-quality MAGs|Genome Annotation|Genomics|\nCompare MAG functional profiles|Protein Family Sorter / Comparative Systems|Protein Tools|\nBuild phylogeny of a MAG vs references|Bacterial Genome Tree (if MAG is bacterial)|Phylogenomics|\nIdentify AMR genes in MAGs|Antimicrobial Resistance Tab (after annotation)|Genome landing page|\n\n8 Manage, Share & Download\nEach job’s outputs reside in the workspace folder you selected.\nRight-click any file/folder → Share (generate a read-only or editable link) or Download.\nUse Move to organise QC reports, taxonomic profiles, MAGs and mapping results into sub-folders.\n\nQuick Workflow Snapshot\nRaw reads → Fastq Utilities → Taxonomic Classification (community snapshot) → Metagenomic Binning (recover MAGs) → Metagenomic Read Mapping (quantify targets) → Explore visualisations → (Optionally) annotate MAGs and perform comparative / phylogenomic studies.\nEverything above is achieved entirely through the BV-BRC web interface—no command line required.\n",
+      "score": 256.29217529296875,
+      "metadata": {
+        "program": "distllm",
+        "config_name": "bvbrc_helpdesk",
+        "path": "howto_metagenomic_analysis.txt",
+        "doc_id": "0fb2b467-f0ce-4319-9108-06e6130e37b5"
+      }
+    },
+    {
+      "content": "6 Quantify Key Pathogens or Genes Across Reads\nTools & Services ▸ Metagenomics ▸ Metagenomic Read Mapping\nInput Reads → cleaned FASTQs\nReference Genomes → select one or more annotated MAGs (or public BV-BRC genomes)\nSubmit\nOutputs:\nCoverage plots and BAM files (viewable in the Genome Browser)\nRead-count tables per genome and per gene\nGreat for measuring pathogen load or tracking specific AMR genes across samples/time points.\n\n7 AMR Insight for MAGs\nOn each annotated MAG’s landing page:\nTab / Tool|What to look for|\nSpecialty Genes ▸ AMR Genes|Catalog of resistance determinants with drug class & evidence|\nAMR Prediction|Machine-learning call (Resistant/Intermediate/Susceptible) for each antibiotic|\nCurated AST Data|Laboratory MIC / disk records that underpin the ML models|\n\n8 Comparative & Functional Follow-ups (Optional)\nQuestion|BV-BRC Tool & Path|\nShared vs unique proteins among MAGs|Protein Tools ▸ Proteome Comparison|\nPresence/absence of AMR-related protein families|Protein Tools ▸ Protein Family Sorter (filter for AMR families)|\nMetabolic or virulence subsystem differences|Protein Tools ▸ Comparative Systems|\nHigh-resolution variation in AMR genes|Protein Tools ▸ MSA & SNP Analysis on selected genes|\nAll tools launch interactive heat-maps, alignments, or SNP tables linked back to the Genome Browser.\n\n9 Share, Archive & Report\nEvery job’s output remains in the workspace folder you chose.\nRight-click files/folders → Share (generate read-only or editable links) or Download.\nExport figures (Krona, Sankey, heat-maps, coverage plots) as PNG/SVG for manuscripts or clinical reports.\nOrganise everything into sub-folders—Taxonomy, MAGs, AMR, Mapping, Figures—for easy retrieval.\n\n",
+      "score": 250.55177307128906,
+      "metadata": {
+        "program": "distllm",
+        "config_name": "bvbrc_helpdesk",
+        "path": "howto_clinical_metagenomic_analysis.txt",
+        "doc_id": "ce5c45d4-4e43-4517-ab29-3967baeca148"
+      }
+    },
+    {
+      "content": "BV-BRC User Guide\nHow to Analyze Clinical Metagenomic Sample\n\n1 Prepare & Upload the Raw Reads\nSign in → Workspaces ▸ My Data\nCreate a project folder – e.g. Patient_2025_07_StoolMG\nClick Upload (or Globus Upload for very large files) and add your paired-end or single-end FASTQ/FASTQ.GZ files.\n\n2 Quality-Control & Trimming\nTools & Services ▸ Utilities ▸ Fastq Utilities\nAdd Files → select the uploaded reads\nKeep the default “Adapter trimming + QC” (Trimmomatic + FastQC)\nSubmit and, when complete, open the job → review the linked FastQC HTML reports\nCleaned reads are automatically saved in your project folder for downstream steps\n\n3 Taxonomic Profiling (What’s in the Sample?)\nTools & Services ▸ Metagenomics ▸ Taxonomic Classification\nInput Reads → choose the cleaned FASTQs\n(Optional) set read type (paired / single) and minimum hit length\nSubmit\nInspect auto-generated visualisations in the job folder:\nKrona Plot – zoom through domains → species\nSankey Diagram – ribbon view of read flow across taxonomic ranks\nStacked Bar Charts – compare multiple samples (if provided)\nAbundance Table – TSV download for reports\nUse these results to spot primary pathogens, commensals, or unexpected contaminants.\n\n4 Reconstruct Metagenome-Assembled Genomes (MAGs)\nTools & Services ▸ Metagenomics ▸ Metagenomic Binning\nInput Reads → select the same cleaned FASTQs\nAccept default parameters (MetaBAT 2 binning) or adjust if desired\nSubmit\nJob outputs include:\nIndividual MAG FASTA files\nCompleteness vs Contamination scatter – quickly flag high-quality bins\nCoverage + GC plots for each bin\n\n5 Annotate High-Quality MAGs\nIn the binning results, right-click a high-quality MAG FASTA → Annotate Genome\n(shortcut into the next tool)\nConfirm organism name (or leave “Unknown sp.”) and Submit\nEach annotated MAG now has a full Genome Landing Page with:\nGene features, Specialty Genes ▸ AMR tab, metabolic subsystems, etc.\n\n",
+      "score": 250.36544799804688,
+      "metadata": {
+        "program": "distllm",
+        "config_name": "bvbrc_helpdesk",
+        "path": "howto_clinical_metagenomic_analysis.txt",
+        "doc_id": "ce5c45d4-4e43-4517-ab29-3967baeca148"
+      }
+    }
+  ],
+  "count": 5,
+  "query": "how do I use the metagenomic binning service",
+  "index": "bvbrc_helpdesk",
+  "source": "bvbrc-rag",
+  "summary": "To use the Metagenomic Binning Service, start by navigating to the service through the **Tools & Services** tab and selecting **Metagenomic Binning** under the **Metagenomics** category. You will need to choose whether to start with read files or assembled contigs and upload your input files accordingly. The service allows multiple read types to be uploaded and submitted. \n\nHere are the general steps:\n* Prepare and upload your raw reads or assembled contigs.\n* Select the Metagenomic Binning Service and choose your input files.\n* Accept default parameters or adjust as desired (e.g., MetaBAT 2 binning).\n* Submit your job and wait for the results, which may take several hours or days depending on the size of the input files and the queue.\n\nThe output will include key visualizations such as Krona plots, Sankey diagrams, and Completeness vs Contamination scatter plots, as well as downloadable files like MAG FASTA files and BAM alignment files. You can also use the output for downstream analyses, such as annotating high-quality MAGs, comparing MAG functional profiles, and building phylogeny of a MAG vs references."
+}

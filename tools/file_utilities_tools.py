@@ -37,7 +37,7 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
         start: Optional[int] = 1,
         end: Optional[int] = None,
         limit: Optional[int] = 1000
-    ) -> str:
+    ) -> Dict[str, Any]:
         """
         Read specific line ranges from a file. Supports JSON arrays, CSV/TSV, and text files.
         For JSON arrays, returns records as objects. For CSV/TSV, parses rows as objects with 
@@ -67,13 +67,14 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
                 end=end,
                 limit=limit or 1000
             )
-            return json.dumps(result, indent=2)
+            return result
         except Exception as e:
-            return json.dumps({
+            return {
                 "error": True,
                 "errorType": "INVALID_PARAMETERS",
-                "message": f"Error reading file lines: {str(e)}"
-            }, indent=2)
+                "message": f"Error reading file lines: {str(e)}",
+                "source": "bvbrc-file-utilities"
+            }
     
     @mcp.tool()
     def search_file(
@@ -84,7 +85,7 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
         case_sensitive: Optional[bool] = False,
         fields: Optional[List[str]] = None,
         limit: Optional[int] = 100
-    ) -> str:
+    ) -> Dict[str, Any]:
         """
         Search for a pattern in a file (grep-like functionality). Supports literal string 
         matching and regex patterns. For JSON/CSV files, can search specific fields only.
@@ -115,13 +116,14 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
                 fields=fields,
                 limit=limit or 100
             )
-            return json.dumps(result, indent=2)
+            return result
         except Exception as e:
-            return json.dumps({
+            return {
                 "error": True,
                 "errorType": "INVALID_PARAMETERS",
-                "message": f"Error searching file: {str(e)}"
-            }, indent=2)
+                "message": f"Error searching file: {str(e)}",
+                "source": "bvbrc-file-utilities"
+            }
     
     @mcp.tool()
     def query_json(
@@ -132,7 +134,7 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
         sort: Optional[Dict[str, str]] = None,
         limit: Optional[int] = 1000,
         offset: Optional[int] = 0
-    ) -> str:
+    ) -> Dict[str, Any]:
         """
         Query JSON array files with SQL-like filtering, projection, and sorting.
         Apply multiple filters (AND logic), select specific fields, sort results, and paginate.
@@ -169,13 +171,14 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
                 limit=limit or 1000,
                 offset=offset or 0
             )
-            return json.dumps(result, indent=2)
+            return result
         except Exception as e:
-            return json.dumps({
+            return {
                 "error": True,
                 "errorType": "INVALID_PARAMETERS",
-                "message": f"Error querying JSON: {str(e)}"
-            }, indent=2)
+                "message": f"Error querying JSON: {str(e)}",
+                "source": "bvbrc-file-utilities"
+            }
     
     @mcp.tool()
     def extract_csv_columns(
@@ -184,7 +187,7 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
         columns: List[str],
         limit: Optional[int] = 1000,
         skip_rows: Optional[int] = 0
-    ) -> str:
+    ) -> Dict[str, Any]:
         """
         Extract specific columns from CSV/TSV files. Returns only the requested columns
         as objects, handling missing columns gracefully. Only works on CSV/TSV files.
@@ -212,13 +215,14 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
                 limit=limit or 1000,
                 skip_rows=skip_rows or 0
             )
-            return json.dumps(result, indent=2)
+            return result
         except Exception as e:
-            return json.dumps({
+            return {
                 "error": True,
                 "errorType": "INVALID_PARAMETERS",
-                "message": f"Error extracting CSV columns: {str(e)}"
-            }, indent=2)
+                "message": f"Error extracting CSV columns: {str(e)}",
+                "source": "bvbrc-file-utilities"
+            }
     
     @mcp.tool()
     def get_file_statistics(
@@ -226,7 +230,7 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
         file_id: str,
         fields: Optional[List[str]] = None,
         sample_size: Optional[int] = 10
-    ) -> str:
+    ) -> Dict[str, Any]:
         """
         Get statistical summaries for file fields. Automatically detects field types 
         (numeric, string, boolean) and calculates appropriate statistics. For numeric fields,
@@ -258,10 +262,11 @@ def register_file_utilities_tools(mcp: FastMCP, config: dict = None):
                 fields=fields,
                 sample_size=sample_size or 10
             )
-            return json.dumps(result, indent=2)
+            return result
         except Exception as e:
-            return json.dumps({
+            return {
                 "error": True,
                 "errorType": "INVALID_PARAMETERS",
-                "message": f"Error calculating statistics: {str(e)}"
-            }, indent=2)
+                "message": f"Error calculating statistics: {str(e)}",
+                "source": "bvbrc-file-utilities"
+            }

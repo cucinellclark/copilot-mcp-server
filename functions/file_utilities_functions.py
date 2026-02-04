@@ -91,7 +91,8 @@ def read_file_lines_func(
         return {
             "error": True,
             "errorType": "INVALID_PARAMETERS",
-            "message": "Missing required parameters: session_id and file_id"
+            "message": "Missing required parameters: session_id and file_id",
+            "source": "bvbrc-file-utilities"
         }
     
     # Enforce limit maximum
@@ -105,7 +106,8 @@ def read_file_lines_func(
             "error": True,
             "errorType": "FILE_NOT_FOUND",
             "message": f"File {file_id} not found",
-            "details": {"fileId": file_id, "session_id": session_id}
+            "details": {"fileId": file_id, "session_id": session_id},
+            "source": "bvbrc-file-utilities"
         }
     
     file_type = detect_file_type(file_path)
@@ -121,7 +123,8 @@ def read_file_lines_func(
         return {
             "error": True,
             "errorType": "INVALID_PARAMETERS",
-            "message": f"Error reading file: {str(e)}"
+            "message": f"Error reading file: {str(e)}",
+            "source": "bvbrc-file-utilities"
         }
 
 
@@ -174,7 +177,8 @@ def _read_csv_lines(file_path: str, start: int, end: Optional[int], limit: int, 
         "startLine": start_idx + 1,
         "endLine": end_idx,
         "totalLines": total_lines,
-        "hasMore": end_idx < total_lines
+        "hasMore": end_idx < total_lines,
+        "source": "bvbrc-file-utilities"
     }
 
 
@@ -197,7 +201,8 @@ def _read_text_lines(file_path: str, start: int, end: Optional[int], limit: int)
         "startLine": start_idx + 1,
         "endLine": end_idx,
         "totalLines": total_lines,
-        "hasMore": end_idx < total_lines
+        "hasMore": end_idx < total_lines,
+        "source": "bvbrc-file-utilities"
     }
 
 
@@ -230,7 +235,8 @@ def search_file_func(
         return {
             "error": True,
             "errorType": "INVALID_PARAMETERS",
-            "message": "Missing required parameters"
+            "message": "Missing required parameters",
+            "source": "bvbrc-file-utilities"
         }
     
     # Enforce limit
@@ -262,7 +268,8 @@ def search_file_func(
         return {
             "error": True,
             "errorType": "INVALID_PARAMETERS",
-            "message": f"Invalid regex pattern: {str(e)}"
+            "message": f"Invalid regex pattern: {str(e)}",
+            "source": "bvbrc-file-utilities"
         }
     
     try:
@@ -276,7 +283,8 @@ def search_file_func(
         return {
             "error": True,
             "errorType": "INVALID_PARAMETERS",
-            "message": f"Error searching file: {str(e)}"
+            "message": f"Error searching file: {str(e)}",
+            "source": "bvbrc-file-utilities"
         }
 
 
@@ -367,7 +375,8 @@ def _search_csv(file_path: str, regex: re.Pattern, fields: Optional[List[str]], 
     return {
         "matches": matches,
         "totalMatches": total_matches,
-        "truncated": total_matches > len(matches)
+        "truncated": total_matches > len(matches),
+        "source": "bvbrc-file-utilities"
     }
 
 
@@ -395,7 +404,8 @@ def _search_text(file_path: str, regex: re.Pattern, limit: int) -> Dict[str, Any
     return {
         "matches": matches,
         "totalMatches": total_matches,
-        "truncated": total_matches > len(matches)
+        "truncated": total_matches > len(matches),
+        "source": "bvbrc-file-utilities"
     }
 
 
@@ -441,7 +451,8 @@ def query_json_func(
         return {
             "error": True,
             "errorType": "FILE_NOT_FOUND",
-            "message": f"File {file_id} not found"
+            "message": f"File {file_id} not found",
+            "source": "bvbrc-file-utilities"
         }
     
     file_type = detect_file_type(file_path)
@@ -455,7 +466,8 @@ def query_json_func(
                 "fileId": file_id,
                 "expectedType": "json_array",
                 "actualType": file_type
-            }
+            },
+            "source": "bvbrc-file-utilities"
         }
     
     try:
@@ -466,7 +478,8 @@ def query_json_func(
             return {
                 "error": True,
                 "errorType": "UNSUPPORTED_OPERATION",
-                "message": "query_json only works on JSON arrays"
+                "message": "query_json only works on JSON arrays",
+                "source": "bvbrc-file-utilities"
             }
         
         # Apply filters
@@ -508,14 +521,16 @@ def query_json_func(
         return {
             "records": records,
             "totalMatching": total_matching,
-            "returned": len(records)
+            "returned": len(records),
+            "source": "bvbrc-file-utilities"
         }
         
     except Exception as e:
         return {
             "error": True,
             "errorType": "INVALID_PARAMETERS",
-            "message": f"Error querying JSON: {str(e)}"
+            "message": f"Error querying JSON: {str(e)}",
+            "source": "bvbrc-file-utilities"
         }
 
 
@@ -594,7 +609,8 @@ def extract_csv_columns_func(
         return {
             "error": True,
             "errorType": "INVALID_PARAMETERS",
-            "message": "Missing required parameters"
+            "message": "Missing required parameters",
+            "source": "bvbrc-file-utilities"
         }
     
     # Enforce limit
@@ -607,7 +623,8 @@ def extract_csv_columns_func(
         return {
             "error": True,
             "errorType": "FILE_NOT_FOUND",
-            "message": f"File {file_id} not found"
+            "message": f"File {file_id} not found",
+            "source": "bvbrc-file-utilities"
         }
     
     file_type = detect_file_type(file_path)
@@ -621,7 +638,8 @@ def extract_csv_columns_func(
                 "fileId": file_id,
                 "expectedType": "csv or tsv",
                 "actualType": file_type
-            }
+            },
+            "source": "bvbrc-file-utilities"
         }
     
     delimiter = '\t' if file_type == 'tsv' else ','
@@ -648,14 +666,16 @@ def extract_csv_columns_func(
             "data": data,
             "columns": columns,
             "rowCount": len(data),
-            "totalRows": total_rows
+            "totalRows": total_rows,
+            "source": "bvbrc-file-utilities"
         }
         
     except Exception as e:
         return {
             "error": True,
             "errorType": "INVALID_PARAMETERS",
-            "message": f"Error extracting CSV columns: {str(e)}"
+            "message": f"Error extracting CSV columns: {str(e)}",
+            "source": "bvbrc-file-utilities"
         }
 
 
@@ -711,13 +731,15 @@ def get_file_statistics_func(
             return {
                 "error": True,
                 "errorType": "UNSUPPORTED_OPERATION",
-                "message": "Statistics only work on JSON arrays or CSV/TSV files"
+                "message": "Statistics only work on JSON arrays or CSV/TSV files",
+                "source": "bvbrc-file-utilities"
             }
         
         if not records:
             return {
                 "statistics": {},
-                "totalRecords": 0
+                "totalRecords": 0,
+                "source": "bvbrc-file-utilities"
             }
         
         # Determine fields to analyze
@@ -734,14 +756,16 @@ def get_file_statistics_func(
         
         return {
             "statistics": statistics_result,
-            "totalRecords": len(records)
+            "totalRecords": len(records),
+            "source": "bvbrc-file-utilities"
         }
         
     except Exception as e:
         return {
             "error": True,
             "errorType": "INVALID_PARAMETERS",
-            "message": f"Error calculating statistics: {str(e)}"
+            "message": f"Error calculating statistics: {str(e)}",
+            "source": "bvbrc-file-utilities"
         }
 
 

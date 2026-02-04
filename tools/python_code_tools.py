@@ -7,7 +7,7 @@ This module contains MCP tools for executing and managing Python code.
 
 import json
 import sys
-from typing import Optional
+from typing import Optional, Dict, Any
 from fastmcp import FastMCP
 
 from functions.python_code_functions import (
@@ -36,7 +36,7 @@ def register_python_code_tools(mcp: FastMCP, config: dict = None, token_provider
     @mcp.tool()
     def run_python_code(
         code: str
-    ) -> str:
+    ) -> Dict[str, Any]:
         """
         Execute Python code and return the result.
         Validates syntax before execution. If syntax errors are found,
@@ -72,13 +72,15 @@ def register_python_code_tools(mcp: FastMCP, config: dict = None, token_provider
                 if validation_result.get("error"):
                     error_msg += f": {validation_result['error']}"
                 
-                return json.dumps({
+                return {
                     "success": False,
                     "output": "",
                     "error": error_msg,
+                    "errorType": "SYNTAX_ERROR",
                     "result": None,
-                    "execution_time": 0.0
-                }, indent=2)
+                    "execution_time": 0.0,
+                    "source": "bvbrc-python-execution"
+                }
             
             # If validation passes, execute the code
             result = execute_python_code(
@@ -86,15 +88,17 @@ def register_python_code_tools(mcp: FastMCP, config: dict = None, token_provider
                 config=config,
                 token=auth_token  # Pass token for workspace uploads
             )
-            return json.dumps(result, indent=2)
+            return result
         except Exception as e:
-            return json.dumps({
+            return {
                 "success": False,
-                "error": f"Error executing Python code: {str(e)}"
-            }, indent=2)
+                "error": f"Error executing Python code: {str(e)}",
+                "errorType": "API_ERROR",
+                "source": "bvbrc-python-execution"
+            }
     
     @mcp.tool()
-    def get_python_info() -> str:
+    def get_python_info() -> Dict[str, Any]:
         """
         Get information about the Python environment.
         
@@ -107,9 +111,11 @@ def register_python_code_tools(mcp: FastMCP, config: dict = None, token_provider
         print("Fetching Python environment information...", file=sys.stderr)
         try:
             result = get_python_environment_info(config=config)
-            return json.dumps(result, indent=2)
+            return result
         except Exception as e:
-            return json.dumps({
-                "error": f"Error getting Python info: {str(e)}"
-            }, indent=2)
+            return {
+                "error": f"Error getting Python info: {str(e)}",
+                "errorType": "API_ERROR",
+                "source": "bvbrc-python-execution"
+            }
 

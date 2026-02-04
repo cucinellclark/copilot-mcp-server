@@ -76,6 +76,7 @@ def query_rag_helpdesk_func(
             "count": len(results),
             "query": query,
             "index": database_name,
+            "source": "bvbrc-rag"
         }
 
         # Summarize retrieved documents as the final step
@@ -101,6 +102,8 @@ def query_rag_helpdesk_func(
             "summary": "",
             "used_documents": [],
             "error": str(e),
+            "errorType": "API_ERROR",
+            "source": "bvbrc-rag"
         }
 
 
@@ -234,6 +237,7 @@ def list_publication_datasets_func(
         "count": 0,
         "query": query,
         "index": "publication_datasets",
+        "source": "bvbrc-rag"
     }
 
     return result
