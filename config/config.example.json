@@ -44,7 +44,15 @@
         "session_base_path": "/tmp/copilot/sessions",
         "max_file_size_mb": 100,
         "default_limit": 1000,
-        "max_limit": 10000
+        "max_limit": 10000,
+        "mongo_url": "mongodb://127.0.0.1:27017/copilot",
+        "mongo_database": "copilot",
+        "mongo_collection": "session_files"
+    },
+    
+    "sra_tools": {
+        "_comment": "Configuration for SRA (Sequence Read Archive) tools",
+        "singularity_container": "/vol/patric3/production/containers/ubuntu-027-11.sif"
     }
 }
 

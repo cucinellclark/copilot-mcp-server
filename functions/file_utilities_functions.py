@@ -2,7 +2,8 @@
 File Utilities Functions
 
 This module provides functions for reading and analyzing files from user sessions.
-Files are stored in /tmp/copilot/sessions/{session_id}/downloads/ directory.
+Files are indexed in MongoDB (session_files) and stored on disk under the
+session downloads directory.
 """
 
 import os
@@ -12,6 +13,9 @@ import re
 import statistics
 from typing import Dict, Any, List, Optional, Union
 import random
+
+from common.config import get_config
+from functions.file_registry import get_file_record
 
 
 def get_file_path(session_id: str, file_id: str) -> str:
@@ -25,17 +29,25 @@ def get_file_path(session_id: str, file_id: str) -> str:
     Returns:
         Absolute path to the file
     """
-    base_path = f"/tmp/copilot/sessions/{session_id}/downloads"
-    
-    # Try different extensions
+    # Prefer DB-backed file registry (Option A)
+    record = get_file_record(session_id, file_id)
+    if record and record.get("filePath"):
+        return record["filePath"]
+
+    # Fallback to direct filesystem lookup
+    config = get_config().file_utilities or {}
+    base_path = config.get("session_base_path", "/tmp/copilot/sessions")
+    downloads_path = os.path.join(base_path, session_id, "downloads")
+
+    # Try different extensions (legacy lookup)
     extensions = ['', '.json', '.csv', '.tsv', '.txt']
     for ext in extensions:
-        file_path = os.path.join(base_path, f"{file_id}{ext}")
+        file_path = os.path.join(downloads_path, f"{file_id}{ext}")
         if os.path.exists(file_path):
             return file_path
-    
+
     # Return base path without extension if not found
-    return os.path.join(base_path, file_id)
+    return os.path.join(downloads_path, file_id)
 
 
 def detect_file_type(file_path: str) -> str:

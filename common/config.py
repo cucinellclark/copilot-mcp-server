@@ -83,6 +83,9 @@ class AppConfig:
         # File utilities configuration
         self.file_utilities = config.get("file_utilities", {})
         
+        # SRA tools configuration
+        self.sra_tools = config.get("sra_tools", {})
+        
         # OAuth configuration
         self.oauth = OAuthConfig(config)
     
