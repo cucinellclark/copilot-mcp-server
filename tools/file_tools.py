@@ -16,7 +16,6 @@ from fastmcp import FastMCP
 
 from functions.file_info_functions import head_file_func
 from functions.file_utilities_functions import (
-    read_file_lines_func,
     search_file_func,
     query_json_func,
 )
@@ -56,34 +55,6 @@ def register_file_tools(mcp: FastMCP, config: dict = None):
                 "error": True,
                 "errorType": "PROCESSING_ERROR",
                 "message": f"Error getting file preview: {str(e)}",
-                "source": "bvbrc-file-utilities"
-            }
-
-    @mcp.tool()
-    def read_file_lines(
-        session_id: str,
-        file_id: str,
-        start: Optional[int] = 1,
-        end: Optional[int] = None,
-        limit: Optional[int] = 1000
-    ) -> Dict[str, Any]:
-        """
-        Read a bounded range of lines/records from a saved file.
-        """
-        print(f"Reading lines from file {file_id} in session {session_id}...", file=sys.stderr)
-        try:
-            return read_file_lines_func(
-                session_id=session_id,
-                file_id=file_id,
-                start=start or 1,
-                end=end,
-                limit=limit or 1000
-            )
-        except Exception as e:
-            return {
-                "error": True,
-                "errorType": "INVALID_PARAMETERS",
-                "message": f"Error reading file lines: {str(e)}",
                 "source": "bvbrc-file-utilities"
             }
 
