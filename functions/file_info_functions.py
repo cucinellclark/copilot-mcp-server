@@ -170,7 +170,6 @@ def _get_available_actions_for_data_type(data_type: str) -> list:
         List of available action tools
     """
     base_actions = [
-        'internal_server.read_file_lines',
         'internal_server.search_file'
     ]
     

@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "copilot-mcp-server",
+      "name": "copilot-mcp-server-dev",
       "script": "./start_server.sh",
       "interpreter": "bash",
       "cwd": "/home/ac.cucinell/bvbrc-dev/Copilot/CopilotMCP",

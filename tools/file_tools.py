@@ -14,11 +14,22 @@ from typing import Optional, List, Dict, Any
 
 from fastmcp import FastMCP
 
-from functions.file_info_functions import head_file_func
 from functions.file_utilities_functions import (
     search_file_func,
     query_json_func,
 )
+
+# Kept here intentionally so file_utilities config remains documented in one place
+# after preview_file/read_file_lines moved to the consolidated workspace server.
+FILE_UTILITIES_CONFIG_KEYS = {
+    "session_base_path": "/tmp/copilot/sessions",
+    "max_file_size_mb": 100,
+    "default_limit": 1000,
+    "max_limit": 10000,
+    "mongo_url": "mongodb://127.0.0.1:27017/copilot",
+    "mongo_database": "copilot",
+    "mongo_collection": "session_files",
+}
 
 
 def register_file_tools(mcp: FastMCP, config: dict = None):
@@ -27,36 +38,11 @@ def register_file_tools(mcp: FastMCP, config: dict = None):
 
     Args:
         mcp: FastMCP server instance
-        config: (unused) compatibility arg for future tool settings
+        config: file_utilities settings. Supported keys are documented in
+            FILE_UTILITIES_CONFIG_KEYS for compatibility with shared config.
     """
     if config is None:
         config = {}
-
-    @mcp.tool()
-    def preview_file(
-        session_id: str,
-        file_id: str,
-        max_lines: int = 20,
-        max_chars: int = 1000
-    ) -> Dict[str, Any]:
-        """
-        Preview the beginning of a file with smart formatting based on file type.
-        """
-        print(f"Getting preview of file {file_id} in session {session_id}...", file=sys.stderr)
-        try:
-            return head_file_func(
-                session_id=session_id,
-                file_id=file_id,
-                max_lines=max_lines,
-                max_chars=max_chars
-            )
-        except Exception as e:
-            return {
-                "error": True,
-                "errorType": "PROCESSING_ERROR",
-                "message": f"Error getting file preview: {str(e)}",
-                "source": "bvbrc-file-utilities"
-            }
 
     @mcp.tool()
     def search_file(

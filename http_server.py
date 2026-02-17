@@ -58,7 +58,7 @@ logger.info("Registering python_code tools...")
 register_rag_database_tools(mcp, rag_database_config)
 # Enable minimal session file tools so the agent can pull bounded slices of saved
 # artifacts back into context for summarization.
-register_file_tools(mcp, file_utilities_config)
+#register_file_tools(mcp, file_utilities_config)
 register_sra_tools(mcp, sra_tools_config)
 # Add health check tool
 @mcp.tool()
@@ -145,4 +145,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

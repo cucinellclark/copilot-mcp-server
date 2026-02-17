@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 """
-Python Code Tools
+Python Code Tools with Advanced File Handling
 
-This module contains MCP tools for executing and managing Python code.
+This module provides MCP tools for executing and managing Python code in isolated
+containers with comprehensive file tracking and workspace integration.
+
+Features:
+- Secure execution in Singularity containers (no network access)
+- Automatic detection and tracking of generated files
+- File metadata extraction (type, size, MIME type, content preview)
+- Automatic upload of all outputs to user's workspace
+- Syntax validation before execution
+- Detailed execution results and error reporting
 """
 
 import json
@@ -38,20 +47,37 @@ def register_python_code_tools(mcp: FastMCP, config: dict = None, token_provider
         code: str
     ) -> Dict[str, Any]:
         """
-        Execute Python code and return the result.
-        Validates syntax before execution. If syntax errors are found,
-        they are returned in the response without executing the code.
+        Execute Python code for processing local files.
+        
+        This tool is specifically designed for processing local files in your workspace.
+        It provides secure Python code execution with comprehensive file management:
+        - Automatically detects and tracks all files created during execution
+        - Returns metadata for generated files (name, size, type, MIME type)
+        - Includes content preview for small text files
+        - Uploads all generated files (script + outputs) to user's workspace
+        - Validates syntax before execution to catch errors early
+        
+        All code runs in an isolated environment with no network access. Files are saved
+        to a unique timestamped directory and automatically uploaded to the workspace at:
+        /<user_id>/home/CopilotCodeDev/python_run_<timestamp>_<uuid>/
         
         Args:
-            code: The Python code to execute
+            code: The Python code to execute for processing local files
         
         Returns:
-            JSON string with execution results including:
+            Execution results including:
             - success: bool indicating if execution succeeded
-            - output: stdout output
-            - error: stderr output or syntax error (if any)
-            - result: return value (if any)
+            - output: stdout from the script
+            - error: stderr output or syntax/execution errors
             - execution_time: time taken in seconds
+            - output_files: array of file metadata for all generated files
+            - workspace_upload: details about workspace upload (path, file count, status)
+        
+        Example use cases:
+        - Data processing: load CSV, transform, save results
+        - File generation: create plots, reports, or data exports
+        - Batch operations: process multiple files and save outputs
+        - Complex analysis: multi-step workflows with intermediate file outputs
         """
         try:
             # Extract token using TokenProvider (if available)
@@ -100,13 +126,20 @@ def register_python_code_tools(mcp: FastMCP, config: dict = None, token_provider
     @mcp.tool()
     def get_python_info() -> Dict[str, Any]:
         """
-        Get information about the Python environment.
+        Get detailed information about the Python execution environment.
+        
+        Returns comprehensive details about the Python runtime that will be used
+        for code execution, including version, platform, and system architecture.
         
         Returns:
-            JSON string with Python environment information:
-            - version: Python version
-            - platform: platform information
-            - installed_packages: list of installed packages (optional)
+            Python environment details:
+            - version: Full Python version string
+            - version_info: Major, minor, and micro version numbers
+            - platform: Platform information (OS and version)
+            - architecture: System architecture details
+            - machine: Machine type
+            - processor: Processor information
+            - python_path: Path to the Python executable
         """
         print("Fetching Python environment information...", file=sys.stderr)
         try:

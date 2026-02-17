@@ -213,7 +213,6 @@ def execute_python_code(
             "singularity",
             "exec",
             "--bind", f"{temp_directory}:{temp_directory}",
-            "--net",
             "--network",
             "none",
             "--containall",
