@@ -17,10 +17,10 @@
             "os",
             "sys"
         ],
-        "temp_directory": "/tmp/copilot_python",
         "singularity_container": "/path/to/python.sif",
         "workspace_output": "CopilotCodeDev",
-        "workspace_url": "https://p3.theseed.org/services/Workspace"
+        "workspace_url": "https://p3.theseed.org/services/Workspace",
+        "copilot_sessions_base": "/tmp/copilot/sessions"
     },
     
     "rag_database": {

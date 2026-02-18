@@ -10,6 +10,68 @@ import sys
 import requests
 import json
 from typing import Optional, Dict, Any, List
+from urllib.parse import urljoin
+from fastmcp.utilities.logging import get_logger
+
+logger = get_logger(__name__)
+
+
+def _extract_create_metadata(result: Any) -> Optional[Any]:
+    """
+    Extract the workspace metadata array/object from Workspace.create response.
+    Handles minor shape variations in JSON-RPC result payloads.
+    """
+    if result is None:
+        return None
+
+    # Common shape: [[meta_array]]
+    if isinstance(result, list) and result:
+        first = result[0]
+        if isinstance(first, list) and first:
+            second = first[0]
+            # Sometimes wrapped as [[[meta_array], ...]]
+            if isinstance(second, list) and second and isinstance(second[0], list):
+                return second[0]
+            return second
+
+    # Fallback if service returns object-like metadata directly
+    if isinstance(result, dict):
+        return result
+
+    return None
+
+
+def _extract_upload_url(meta: Any) -> str:
+    """
+    Extract upload URL from metadata array/object.
+    Returns empty string if no usable URL is present.
+    """
+    if isinstance(meta, dict):
+        # Some responses nest URL fields under metadata-like containers.
+        for nested_key in ("metadata", "meta", "data"):
+            nested = meta.get(nested_key)
+            if isinstance(nested, (dict, list)):
+                nested_url = _extract_upload_url(nested)
+                if nested_url:
+                    return nested_url
+
+        for key in ("link_reference", "linkReference", "upload_url", "uploadUrl", "url"):
+            value = meta.get(key)
+            if isinstance(value, str) and value.strip():
+                return value
+        return ""
+
+    if isinstance(meta, list):
+        # Historical location for Workspace metadata array link reference.
+        if len(meta) > 11 and isinstance(meta[11], str) and meta[11].startswith(("http://", "https://")):
+            return meta[11]
+
+        # Fallback: locate first URL-looking string.
+        for value in meta:
+            if isinstance(value, str) and value.startswith(("http://", "https://")):
+                return value
+
+    return ""
 
 
 class JsonRpcCaller:
@@ -117,6 +179,7 @@ def workspace_create_upload_node(api: JsonRpcCaller, workspace_path: str, token:
     Returns:
         Dictionary with upload URL and metadata
     """
+    logger.debug(f"[workspace_create_upload_node] Creating upload node for: {workspace_path}")
     try:
         # Call Workspace.create to create upload node
         # Format: [[path, type, metadata, content]]
@@ -131,42 +194,88 @@ def workspace_create_upload_node(api: JsonRpcCaller, workspace_path: str, token:
             token
         )
         
-        # Parse the result
-        if result and len(result) > 0 and len(result[0]) > 0:
-            # Extract the metadata array from result[0][0]
-            meta_list = result[0][0]
-            
-            # Convert the array to a structured object
-            meta_obj = {
-                "id": meta_list[4],
-                "path": meta_list[2] + meta_list[0],
-                "name": meta_list[0],
-                "type": meta_list[1],
-                "creation_time": meta_list[3],
-                "link_reference": meta_list[11],  # This is the upload URL
-                "owner_id": meta_list[5],
-                "size": meta_list[6],
-                "user_meta": meta_list[7],
-                "auto_meta": meta_list[8],
-                "user_permission": meta_list[9],
-                "global_permission": meta_list[10],
-            }
-            
-            return {
-                "success": True,
-                "upload_url": meta_obj["link_reference"],
-                "metadata": meta_obj
-            }
-        else:
+        logger.debug(f"[workspace_create_upload_node] API call result type: {type(result)}")
+
+        meta = _extract_create_metadata(result)
+        if meta is None:
+            error_msg = "No valid metadata returned from Workspace.create"
+            logger.error(f"[workspace_create_upload_node] {error_msg}, result={result}")
             return {
                 "success": False,
-                "error": "No valid result returned from workspace API"
+                "error": error_msg
             }
+
+        if isinstance(meta, dict):
+            meta_obj = {
+                "id": meta.get("id", ""),
+                "path": meta.get("path", workspace_path),
+                "name": meta.get("name", os.path.basename(workspace_path)),
+                "type": meta.get("type", "unspecified"),
+                "creation_time": meta.get("creation_time", ""),
+                "link_reference": meta.get("link_reference", ""),
+                "owner_id": meta.get("owner_id", ""),
+                "size": meta.get("size", 0),
+                "user_meta": meta.get("user_meta", {}),
+                "auto_meta": meta.get("auto_meta", {}),
+                "user_permission": meta.get("user_permission", ""),
+                "global_permission": meta.get("global_permission", ""),
+            }
+        else:
+            # Metadata array shape from Workspace service
+            meta_obj = {
+                "id": meta[4] if len(meta) > 4 else "",
+                "path": (meta[2] + meta[0]) if len(meta) > 2 else workspace_path,
+                "name": meta[0] if len(meta) > 0 else os.path.basename(workspace_path),
+                "type": meta[1] if len(meta) > 1 else "unspecified",
+                "creation_time": meta[3] if len(meta) > 3 else "",
+                "link_reference": meta[11] if len(meta) > 11 else "",
+                "owner_id": meta[5] if len(meta) > 5 else "",
+                "size": meta[6] if len(meta) > 6 else 0,
+                "user_meta": meta[7] if len(meta) > 7 else {},
+                "auto_meta": meta[8] if len(meta) > 8 else {},
+                "user_permission": meta[9] if len(meta) > 9 else "",
+                "global_permission": meta[10] if len(meta) > 10 else "",
+            }
+
+        upload_url = _extract_upload_url(meta)
+        if isinstance(upload_url, str):
+            upload_url = upload_url.strip()
+
+        # Some Workspace deployments return relative upload links.
+        if upload_url and upload_url.startswith("/"):
+            upload_url = urljoin(f"{api.service_url}/", upload_url.lstrip("/"))
+
+        if not upload_url:
+            logger.error(
+                "[workspace_create_upload_node] Workspace.create returned metadata without upload URL",
+                extra={
+                    "workspace_path": workspace_path,
+                    "meta_preview": str(meta)[:1000],
+                    "result_preview": str(result)[:1000],
+                },
+            )
+            return {
+                "success": False,
+                "error": "Workspace.create did not return a valid upload URL",
+                "metadata": meta_obj,
+            }
+
+        meta_obj["link_reference"] = upload_url
+        logger.info(
+            f"[workspace_create_upload_node] Upload node created successfully, upload_url: {upload_url[:80]}..."
+        )
+        return {
+            "success": True,
+            "upload_url": upload_url,
+            "metadata": meta_obj
+        }
             
     except Exception as e:
+        error_msg = f"Error creating upload node: {str(e)}"
+        logger.error(f"[workspace_create_upload_node] {error_msg}", exc_info=True)
         return {
             "success": False,
-            "error": f"Error creating upload node: {str(e)}"
+            "error": error_msg
         }
 
 
@@ -182,17 +291,34 @@ def upload_file_to_workspace_url(file_path: str, upload_url: str, token: str) ->
     Returns:
         Dictionary with upload result status and message
     """
+    logger.debug(f"[upload_file_to_workspace_url] Uploading {os.path.basename(file_path)} to Shock API")
     try:
         # Check if file exists
         if not os.path.exists(file_path):
-            return {"success": False, "error": f"File {file_path} does not exist"}
+            error_msg = f"File {file_path} does not exist"
+            logger.error(f"[upload_file_to_workspace_url] {error_msg}")
+            return {"success": False, "error": error_msg}
         
+        file_size = os.path.getsize(file_path)
+        logger.debug(f"[upload_file_to_workspace_url] File size: {file_size} bytes")
+        
+        if not upload_url or not isinstance(upload_url, str):
+            error_msg = "Upload URL is missing or not a string"
+            logger.error(f"[upload_file_to_workspace_url] {error_msg}")
+            return {"success": False, "error": error_msg}
+
+        if not upload_url.startswith(("http://", "https://")):
+            error_msg = f"Upload URL is invalid (must start with http/https): {upload_url}"
+            logger.error(f"[upload_file_to_workspace_url] {error_msg}")
+            return {"success": False, "error": error_msg}
+
         # Set up headers for the Shock API request
         headers = {
             'Authorization': 'OAuth ' + token
         }
         
         # Prepare the file for multipart form data upload
+        logger.debug(f"[upload_file_to_workspace_url] Making PUT request to: {upload_url[:80]}...")
         with open(file_path, 'rb') as file:
             files = {
                 'upload': (os.path.basename(file_path), file, 'application/octet-stream')
@@ -201,21 +327,28 @@ def upload_file_to_workspace_url(file_path: str, upload_url: str, token: str) ->
             # Make the PUT request with multipart form data
             response = requests.put(upload_url, files=files, headers=headers, timeout=30)
         
+        logger.debug(f"[upload_file_to_workspace_url] Response status code: {response.status_code}")
+        
         if response.status_code == 200:
+            logger.info(f"[upload_file_to_workspace_url] File {os.path.basename(file_path)} uploaded successfully")
             return {
                 "success": True, 
                 "message": f"File {os.path.basename(file_path)} uploaded successfully",
                 "status_code": response.status_code
             }
         else:
+            error_msg = f"Upload failed with status code {response.status_code}: {response.text[:200]}"
+            logger.error(f"[upload_file_to_workspace_url] {error_msg}")
             return {
                 "success": False, 
-                "error": f"Upload failed with status code {response.status_code}: {response.text}",
+                "error": error_msg,
                 "status_code": response.status_code
             }
             
     except Exception as e:
-        return {"success": False, "error": f"Upload failed: {str(e)}"}
+        error_msg = f"Upload failed: {str(e)}"
+        logger.error(f"[upload_file_to_workspace_url] {error_msg}", exc_info=True)
+        return {"success": False, "error": error_msg}
 
 
 def upload_file_to_workspace(
@@ -240,34 +373,49 @@ def upload_file_to_workspace(
     Returns:
         Dictionary with upload status and information
     """
+    filename = os.path.basename(file_path)
+    logger.info(f"[upload_file_to_workspace] Uploading file: {filename}")
+    logger.debug(f"[upload_file_to_workspace] Local path: {file_path}, workspace_dir: {workspace_dir}")
+    
     try:
         # Create API client
         api = JsonRpcCaller(workspace_url)
-        
-        # Get the filename
-        filename = os.path.basename(file_path)
+
+        # Ensure destination directory exists before creating upload nodes.
+        ensure_result = ensure_workspace_directory_exists(api, workspace_dir, token)
+        if not ensure_result.get("success"):
+            error_msg = ensure_result.get("error", "Failed to ensure workspace directory exists")
+            logger.error(f"[upload_file_to_workspace] {error_msg}")
+            return {
+                "success": False,
+                "file": filename,
+                "error": error_msg
+            }
         
         # Build full workspace path
         workspace_path = os.path.join(workspace_dir, filename)
         
         # Create upload node
-        print(f"Creating upload node for {workspace_path}", file=sys.stderr)
+        logger.debug(f"[upload_file_to_workspace] Creating upload node for: {workspace_path}")
         create_result = workspace_create_upload_node(api, workspace_path, token)
         
         if not create_result.get("success"):
+            error_msg = create_result.get("error", "Failed to create upload node")
+            logger.error(f"[upload_file_to_workspace] Failed to create upload node: {error_msg}")
             return {
                 "success": False,
                 "file": filename,
-                "error": create_result.get("error", "Failed to create upload node")
+                "error": error_msg
             }
         
         upload_url = create_result["upload_url"]
+        logger.debug(f"[upload_file_to_workspace] Got upload URL, proceeding with file upload")
         
         # Upload the file
-        print(f"Uploading file to {upload_url}", file=sys.stderr)
         upload_result = upload_file_to_workspace_url(file_path, upload_url, token)
         
         if upload_result.get("success"):
+            logger.info(f"[upload_file_to_workspace] File {filename} uploaded successfully to {workspace_path}")
             return {
                 "success": True,
                 "file": filename,
@@ -275,23 +423,71 @@ def upload_file_to_workspace(
                 "message": upload_result.get("message", "File uploaded successfully")
             }
         else:
+            error_msg = upload_result.get("error", "Upload failed")
+            logger.error(f"[upload_file_to_workspace] File upload failed: {error_msg}")
             return {
                 "success": False,
                 "file": filename,
-                "error": upload_result.get("error", "Upload failed")
+                "error": error_msg
             }
             
     except Exception as e:
+        error_msg = f"Error uploading file: {str(e)}"
+        logger.error(f"[upload_file_to_workspace] {error_msg}", exc_info=True)
         return {
             "success": False,
-            "file": os.path.basename(file_path),
-            "error": f"Error uploading file: {str(e)}"
+            "file": filename,
+            "error": error_msg
         }
     finally:
         try:
             api.close()
         except:
             pass
+
+
+def ensure_workspace_directory_exists(api: JsonRpcCaller, workspace_dir: str, token: str) -> Dict[str, Any]:
+    """
+    Ensure the destination workspace directory exists.
+    """
+    logger.debug(f"[ensure_workspace_directory_exists] Ensuring directory exists: {workspace_dir}")
+    try:
+        result = api.call(
+            "Workspace.create",
+            {
+                "objects": [[workspace_dir, "folder", {}, ""]],
+                "createUploadNodes": False,
+                "overwrite": False
+            },
+            1,
+            token
+        )
+        logger.debug(
+            "[ensure_workspace_directory_exists] Directory ensure call completed",
+            extra={"workspace_dir": workspace_dir, "result_preview": str(result)[:1000]}
+        )
+        return {
+            "success": True,
+            "workspace_dir": workspace_dir
+        }
+    except Exception as e:
+        msg = str(e).lower()
+        # Existing directories commonly surface as "exists/already exists".
+        if "already exists" in msg or "exists" in msg:
+            logger.debug(
+                f"[ensure_workspace_directory_exists] Directory already exists: {workspace_dir}"
+            )
+            return {
+                "success": True,
+                "workspace_dir": workspace_dir
+            }
+
+        error_msg = f"Failed to ensure workspace directory {workspace_dir}: {str(e)}"
+        logger.error(f"[ensure_workspace_directory_exists] {error_msg}", exc_info=True)
+        return {
+            "success": False,
+            "error": error_msg
+        }
 
 
 def upload_files_to_workspace(
@@ -312,6 +508,7 @@ def upload_files_to_workspace(
     Returns:
         Dictionary with upload results for all files
     """
+    logger.info(f"[upload_files_to_workspace] Starting batch upload of {len(file_paths)} files")
     results = {
         "total_files": len(file_paths),
         "successful": 0,
@@ -319,7 +516,8 @@ def upload_files_to_workspace(
         "files": []
     }
     
-    for file_path in file_paths:
+    for i, file_path in enumerate(file_paths, 1):
+        logger.debug(f"[upload_files_to_workspace] Uploading file {i}/{len(file_paths)}: {os.path.basename(file_path)}")
         result = upload_file_to_workspace(file_path, workspace_dir, token, workspace_url)
         results["files"].append(result)
         
@@ -327,8 +525,10 @@ def upload_files_to_workspace(
             results["successful"] += 1
         else:
             results["failed"] += 1
+            logger.warning(f"[upload_files_to_workspace] File {i} failed: {result.get('error', 'Unknown error')}")
     
     results["success"] = results["failed"] == 0
+    logger.info(f"[upload_files_to_workspace] Batch upload complete: {results['successful']}/{results['total_files']} successful, {results['failed']} failed")
     
     return results
 

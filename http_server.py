@@ -54,7 +54,7 @@ mcp = FastMCP("Copilot MCP Server", auth=oauth)
 
 # Register all tools with configuration and token provider
 logger.info("Registering python_code tools...")
-#register_python_code_tools(mcp, python_code_config, token_provider)
+register_python_code_tools(mcp, python_code_config, token_provider)
 register_rag_database_tools(mcp, rag_database_config)
 # Enable minimal session file tools so the agent can pull bounded slices of saved
 # artifacts back into context for summarization.
@@ -145,3 +145,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
