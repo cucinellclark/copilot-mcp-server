@@ -34,8 +34,16 @@ def register_rag_database_tools(mcp: FastMCP, config: dict = None):
         top_k: Optional[int] = None,
     ) -> Dict[str, Any]:
         """
-        Primary tool for BV-BRC usage/how-to/support questions. Use this FIRST for anything like “How do I use a service application?”, workflows, troubleshooting, parameters explained, example runs, BV-BRC pages/features, or documentation needs. Prefer this over service metadata tools; it returns authoritative helpdesk/doc content from the BV-BRC helpdesk RAG.
-
+        Primary tool for BV-BRC usage/how-to/support questions and general questions about BV-BRC capabilities.
+        
+        ⚠️ USE THIS TOOL FOR:
+        - General questions about what you can do in BV-BRC (e.g., "What can I do in BV-BRC?", "What features does BV-BRC have?")
+        - Questions about BV-BRC functionality, capabilities, or platform overview
+        - "How do I use a service application?" questions
+        - Workflows, troubleshooting, parameters explained, example runs
+        - BV-BRC pages/features, or documentation needs
+        - Any question asking "what" or "how" about BV-BRC itself (not about specific data)
+        
         Args:
             query: The search query string, typically a user help or troubleshooting question.
             top_k: Number of top results to return (uses config default if not provided).
