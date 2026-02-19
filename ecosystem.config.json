@@ -4,7 +4,7 @@
       "name": "copilot-mcp-server-dev",
       "script": "./start_server.sh",
       "interpreter": "bash",
-      "cwd": "/home/ac.cucinell/bvbrc-dev/Copilot/CopilotMCP",
+      "cwd": "/home/ac.cucinell/bvbrc-dev/Copilot/DevEnvironment/copilot-mcp-server",
       "instances": 1,
       "exec_mode": "fork",
       "error_file": "./logs/pm2-error.log",

@@ -2,15 +2,12 @@
 """
 Copilot MCP Server - HTTP Mode
 
-This server provides MCP tools for python_code and rag_database functionality.
+This server provides MCP tools for python_code functionality.
 """
 
 from fastmcp import FastMCP
 from fastmcp.utilities.logging import get_logger, configure_logging
 from tools.python_code_tools import register_python_code_tools
-from tools.rag_database_tools import register_rag_database_tools
-from tools.file_tools import register_file_tools
-from tools.sra_tools import register_sra_tools
 from common.token_provider import TokenProvider
 from common.auth import BvbrcOAuthProvider
 from common.config import get_config
@@ -28,9 +25,6 @@ config = get_config()
 port = config.port
 mcp_url = config.mcp_url
 python_code_config = config.python_code
-rag_database_config = config.rag_database
-file_utilities_config = config.file_utilities
-sra_tools_config = config.sra_tools
 
 # OAuth configuration
 authentication_url = config.authentication_url
@@ -55,11 +49,6 @@ mcp = FastMCP("Copilot MCP Server", auth=oauth)
 # Register all tools with configuration and token provider
 logger.info("Registering python_code tools...")
 register_python_code_tools(mcp, python_code_config, token_provider)
-register_rag_database_tools(mcp, rag_database_config)
-# Enable minimal session file tools so the agent can pull bounded slices of saved
-# artifacts back into context for summarization.
-#register_file_tools(mcp, file_utilities_config)
-register_sra_tools(mcp, sra_tools_config)
 # Add health check tool
 @mcp.tool()
 def health_check() -> str:

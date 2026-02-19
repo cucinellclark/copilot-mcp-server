@@ -77,15 +77,6 @@ class AppConfig:
         # Python code configuration
         self.python_code = config.get("python_code", {})
         
-        # RAG database configuration
-        self.rag_database = config.get("rag_database", {})
-        
-        # File utilities configuration
-        self.file_utilities = config.get("file_utilities", {})
-        
-        # SRA tools configuration
-        self.sra_tools = config.get("sra_tools", {})
-        
         # OAuth configuration
         self.oauth = OAuthConfig(config)
     
